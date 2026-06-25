@@ -11,10 +11,10 @@ class Compra extends Model
 
     public function producto()
     {
-        return $this->belongsTo(Producto::class);
+        return $this->belongsTo(Producto::class)->withTrashed();
     }
     public function getTotalAttribute()
     {
-        return $this->cantidad * $this->producto->precio;
+        return $this->cantidad * ($this->producto?->precio ?? 0);
     }
 }

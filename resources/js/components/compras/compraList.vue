@@ -30,6 +30,16 @@ const eliminarCompra = async (id) => {
     await compraService.delete(id);
     cargarCompras(busquedaEnVista.value);
 };
+const exportarExcel = async () => {
+    const Archivo = await compraService.exportar();
+    const Url = URL.createObjectURL(Archivo.data);
+    const link = document.createElement("a");
+    link.href = Url;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(Url);
+};
 onMounted(cargarCompras);
 </script>
 <template>
@@ -53,6 +63,12 @@ onMounted(cargarCompras);
                     @click="abrirCrear"
                 >
                     Registrar Compra
+                </button>
+                <button
+                    class="px-4 py-2 text-sm font-semibold text-white bg-teal-800 rounded-md hover:bg-teal-700 transition-colors"
+                    @click="exportarExcel"
+                >
+                    Exportar a Excel
                 </button>
             </div>
 

@@ -57,4 +57,16 @@ class CompraController extends Controller
         $compra->delete();
         return response()->json(['mensaje'=> 'Se ha eliminado correctamente la compra'],200);
     }
+    
+    public function exportar(){
+        $exportacion = new \App\Exports\ComprasExport();
+        $descarga = $exportacion->exportar();
+
+        $link = response()->streamDownload(function() use ($descarga){
+            $descarga->save('php://output');
+        }, 'ReporteCompras_' . now()->format('d-m-Y') . '.xlsx', [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ]);
+        return $link;
+    }
 }

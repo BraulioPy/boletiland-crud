@@ -13,6 +13,7 @@ Route::delete('/productos/{id}', [ProductoController::class, 'destroy']);
 
 Route::get('/compras', [CompraController::class, 'index']);
 Route::post('/compras', [CompraController::class, 'store']);
+Route::get('/compras/exportar', [CompraController::class, 'exportar']);
 Route::get('/compras/{id}', [CompraController::class, 'show']);
 Route::put('/compras/{id}', [CompraController::class, 'update']);
 Route::delete('/compras/{id}', [CompraController::class, 'destroy']);
