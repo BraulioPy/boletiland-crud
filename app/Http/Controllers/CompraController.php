@@ -10,9 +10,17 @@ use Illuminate\Http\Request;
 class CompraController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Compra::with('producto')->get(),200);
+        $busqueda = $request->query('busqueda');
+        $compras = Compra::when($busqueda, function($query) use ($busqueda) {
+            $query->where('nombre_comprador', 'LIKE', "%{$busqueda}%")
+            ->orWhere('id', 'LIKE', "%{$busqueda}%")
+            ->orWhereHas('producto', function($query2) use ($busqueda){
+                $query2->where('nombre', 'LIKE', "%{$busqueda}%");
+            });
+        })->orderBy('nombre_comprador','asc')->orderBy('id', 'asc')->paginate(6);
+        return response()->json($compras, 200);
     }
 
     public function store(StoreCompraRequest $request)
