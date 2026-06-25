@@ -1,13 +1,29 @@
 <script setup>
 import { ref, watch } from "vue";
 import { compraService } from "../../services/compraService";
+import { productoService } from "../../services/productoService";
 
 const parametrosComponente = defineProps({
     visible: Boolean,
     compra: Number,
 });
+const busquedaProducto = ref("");
+const resultadosProductos = ref([]);
+const productoSeleccionado = ref(null);
+let esperaEnBusqueda = null;
 const emit = defineEmits(["cerrar", "guardado"]);
 const form = ref({ nombre_comprador: "", producto_id: "", cantidad: "" });
+
+async function lanzarBusquedaProductos(busqueda) {
+    const productos = await productoService.getAll(busqueda);
+    resultadosProductos.value = productos.data.data;
+}
+function seleccionarProducto(producto) {
+    productoSeleccionado.value = producto;
+    form.value.producto_id = producto.id;
+    busquedaProducto.value = producto.id;
+    resultadosProductos.value = [];
+}
 watch(
     () => parametrosComponente.compra,
     async (id) => {
@@ -18,12 +34,14 @@ watch(
                 producto_id: response.data.producto_id,
                 cantidad: response.data.cantidad,
             };
+            busquedaProducto.value = response.data.producto_id;
         } else {
             form.value = {
                 nombre_comprador: "",
                 producto_id: "",
                 cantidad: "",
             };
+            busquedaProducto.value = "";
         }
     },
 );
@@ -59,18 +77,58 @@ async function guardar() {
             </h2>
 
             <div class="flex flex-col gap-3">
+                <span>Nombre Comprador:</span>
                 <input
                     v-model="form.nombre_comprador"
                     type="text"
                     placeholder="Nombre del comprador:"
                     class="w-full px-3 py-2 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-zinc-400"
                 />
-                <input
-                    v-model="form.producto_id"
-                    type="number"
-                    placeholder="ID del producto vendido:"
-                    class="w-full px-3 py-2 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-zinc-400"
-                />
+                <span>ID Producto:</span>
+                <div class="flex flex-row">
+                    <input
+                        v-model="busquedaProducto"
+                        type="text"
+                        placeholder="Buscar producto por nombre:"
+                        class="w-full px-3 py-2 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-zinc-400"
+                    />
+                    <button
+                        class="p-2 text-zinc-600 hover:text-zinc-900 rounded-md transition-colors"
+                        @click="lanzarBusquedaProductos(busquedaProducto)"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                            stroke="currentColor"
+                            class="w-5 h-5"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                            />
+                        </svg>
+                    </button>
+                </div>
+                <ul
+                    v-if="resultadosProductos.length"
+                    class="absolute z-10 w-full bg-white border border-zinc-200 rounded-md shadow-md mt-1 max-h-40 overflow-y-auto"
+                >
+                    <li
+                        v-for="producto in resultadosProductos"
+                        :key="producto.id"
+                        @click="seleccionarProducto(producto)"
+                        class="px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 cursor-pointer flex gap-2"
+                    >
+                        <span class="text-zinc-400 shrink-0"
+                            >#{{ producto.id }}</span
+                        >
+                        <span class="truncate">{{ producto.nombre }}</span>
+                    </li>
+                </ul>
+                <span>Cantidad a Vender:</span>
                 <input
                     v-model="form.cantidad"
                     type="number"
