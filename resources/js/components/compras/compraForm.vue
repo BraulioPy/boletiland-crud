@@ -10,7 +10,6 @@ const parametrosComponente = defineProps({
 const busquedaProducto = ref("");
 const resultadosProductos = ref([]);
 const productoSeleccionado = ref(null);
-let esperaEnBusqueda = null;
 const emit = defineEmits(["cerrar", "guardado"]);
 const form = ref({ nombre_comprador: "", producto_id: "", cantidad: "" });
 
@@ -89,7 +88,7 @@ async function guardar() {
                     <input
                         v-model="busquedaProducto"
                         type="text"
-                        placeholder="Buscar producto por nombre:"
+                        placeholder="Buscar producto por nombre o ID:"
                         class="w-full px-3 py-2 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-zinc-400"
                     />
                     <button
