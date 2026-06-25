@@ -3,6 +3,7 @@ import busquedaBar from "../shared/busquedaBar.vue";
 import { compraService } from "../../services/compraService.js";
 import compraForm from "./compraForm.vue";
 import { ref, onMounted } from "vue";
+import CompraForm from "./compraForm.vue";
 const compras = ref([]);
 const mostrarForm = ref(false);
 const busquedaEnVista = ref("");
@@ -153,14 +154,12 @@ onMounted(cargarCompras);
                         </tr>
                     </tbody>
                 </table>
-                <!-- 
-                <ProductoForm
+                <CompraForm
                     :visible="mostrarForm"
-                    :producto="productoSeleccionado"
+                    :compra="compraSeleccionada"
                     @cerrar="mostrarForm = false"
-                    @guardado="cargarProductos(busquedaEnVista)"
+                    @guardado="cargarCompras(busquedaEnVista)"
                 />
-                -->
             </div>
         </div>
 
