@@ -1,17 +1,30 @@
 <script setup>
 import busquedaBar from "../shared/busquedaBar.vue";
 import { productoService } from "../../services/productoService.js";
+import ProductoForm from "./productoForm.vue";
 import { ref } from "vue";
 import { onMounted } from "vue";
 const productos = ref([]);
+const mostrarForm = ref(false);
+const busquedaEnVista = ref("");
+const productoSeleccionado = ref(null);
 const paginaActual = ref(1);
 const ultimaPagina = ref(1);
 
 const cargarProductos = async (busqueda = "") => {
+    busquedaEnVista.value = busqueda;
     const response = await productoService.getAll(busqueda, paginaActual.value);
     productos.value = response.data.data;
     ultimaPagina.value = response.data.last_page;
 };
+function abrirEditar(id) {
+    productoSeleccionado.value = id;
+    mostrarForm.value = true;
+}
+function abrirCrear() {
+    productoSeleccionado.value = null;
+    mostrarForm.value = true;
+}
 onMounted(cargarProductos);
 </script>
 <template>
@@ -23,10 +36,18 @@ onMounted(cargarProductos);
         <div
             class="flex flex-col flex-1 w-full max-w-5xl mx-auto bg-zinc-100 border border-zinc-200 rounded-lg overflow-hidden"
         >
-            <busquedaBar
-                @busqueda="cargarProductos"
-                class="p-4 shrink-0 border-b justify-end border-zinc-200"
-            ></busquedaBar>
+            <div class="flex flex-wrap p-4 items-center justify-end gap-3 mr-2">
+                <busquedaBar
+                    @busqueda="cargarProductos"
+                    class="shrink-0 border-b justify-end border-zinc-200"
+                ></busquedaBar>
+                <button
+                    class="px-4 py-2 text-sm font-semibold text-white bg-teal-600 rounded-md hover:bg-teal-700 transition-colors"
+                    @click="abrirCrear"
+                >
+                    Nuevo Producto
+                </button>
+            </div>
 
             <div class="flex-1 overflow-y-auto bg-white">
                 <table class="w-full text-left text-sm text-zinc-600">
@@ -55,6 +76,7 @@ onMounted(cargarProductos);
                                 <button
                                     class="text-zinc-400 hover:text-blue-600 transition-colors"
                                     title="Editar"
+                                    @click="abrirEditar(producto.id)"
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -93,6 +115,12 @@ onMounted(cargarProductos);
                         </tr>
                     </tbody>
                 </table>
+                <ProductoForm
+                    :visible="mostrarForm"
+                    :producto="productoSeleccionado"
+                    @cerrar="mostrarForm = false"
+                    @guardado="cargarProductos(busquedaEnVista)"
+                />
             </div>
         </div>
 
