@@ -3,7 +3,7 @@
     <div class="bg-zinc-50 min-h-screen pb-6">
         <div class="w-full max-w-7xl mx-auto pt-4 px-6 flex flex-col">
             <nav
-                class="flex items-center gap-10 p-4 bg-zinc-100 border border-zinc-200 rounded-t-lg"
+                class="flex flex-wrap items-center gap-10 p-4 bg-zinc-100 border border-zinc-200 rounded-t-lg"
             >
                 <h1 class="text-xl font-bold text-zinc-900">
                     CRUD Productos-Compras
