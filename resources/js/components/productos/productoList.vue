@@ -25,6 +25,10 @@ function abrirCrear() {
     productoSeleccionado.value = null;
     mostrarForm.value = true;
 }
+const eliminarProducto = async (id) => {
+    await productoService.delete(id);
+    cargarProductos(busquedaEnVista.value);
+};
 onMounted(cargarProductos);
 </script>
 <template>
@@ -65,6 +69,7 @@ onMounted(cargarProductos);
                         <tr
                             v-for="producto in productos"
                             :key="producto.id"
+                            v-if="productos.length > 0"
                             class="hover:bg-zinc-50 transition-colors"
                         >
                             <td class="px-6 py-4 font-medium text-zinc-900">
@@ -96,6 +101,7 @@ onMounted(cargarProductos);
                                 <button
                                     class="text-zinc-400 hover:text-red-600 transition-colors"
                                     title="Eliminar"
+                                    @click="eliminarProducto(producto.id)"
                                 >
                                     <svg
                                         class="w-5 h-5"
@@ -111,6 +117,20 @@ onMounted(cargarProductos);
                                         ></path>
                                     </svg>
                                 </button>
+                            </td>
+                        </tr>
+                        <tr v-else>
+                            <td colspan="4" class="px-6 py-12 text-center">
+                                <div
+                                    class="flex flex-col items-center justify-center gap-3"
+                                >
+                                    <p class="text-zinc-500 font-medium">
+                                        No hay productos registrados con:
+                                    </p>
+                                    <p class="text-zinc-500 font-medium">
+                                        ' {{ busquedaEnVista }} '
+                                    </p>
+                                </div>
                             </td>
                         </tr>
                     </tbody>
