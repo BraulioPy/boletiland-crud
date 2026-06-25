@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch } from "vue";
 import { productoService } from "../../services/productoService";
+import MensajeError from "../shared/mensajeError.vue";
 
 const parametrosComponente = defineProps({
     visible: Boolean,
@@ -8,9 +9,15 @@ const parametrosComponente = defineProps({
 });
 
 const emit = defineEmits(["cerrar", "guardado"]);
-
+const errorValidacion = ref("");
 const form = ref({ nombre: "", precio: "" });
 
+watch(
+    () => parametrosComponente.visible,
+    (valor) => {
+        if (!valor) errorValidacion.value = "";
+    },
+);
 watch(
     () => parametrosComponente.producto,
     async (id) => {
@@ -26,13 +33,26 @@ watch(
     },
 );
 async function guardar() {
-    if (parametrosComponente.producto) {
-        await productoService.update(parametrosComponente.producto, form.value);
-    } else {
-        await productoService.create(form.value);
+    errorValidacion.value = "";
+    try {
+        if (!form.value.nombre || !form.value.precio) {
+            errorValidacion.value =
+                "Por favor, completa todos los campos obligatorios.";
+            return;
+        }
+        if (parametrosComponente.producto) {
+            await productoService.update(
+                parametrosComponente.producto,
+                form.value,
+            );
+        } else {
+            await productoService.create(form.value);
+        }
+        emit("guardado");
+        emit("cerrar");
+    } catch (error) {
+        errorValidacion.value = "Error al completar el registro";
     }
-    emit("guardado");
-    emit("cerrar");
 }
 </script>
 
@@ -67,7 +87,7 @@ async function guardar() {
                     class="w-full px-3 py-2 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-zinc-400"
                 />
             </div>
-
+            <MensajeError :mensaje="errorValidacion"></MensajeError>
             <div class="flex justify-end gap-2 mt-2">
                 <button
                     @click="$emit('cerrar')"
