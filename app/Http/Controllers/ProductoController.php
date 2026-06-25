@@ -9,9 +9,15 @@ use Illuminate\Http\Request;
 
 class ProductoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Producto::all(),200);
+        $busqueda = $request->query('busqueda');
+        $productos = Producto::when($busqueda, function($query) use ($busqueda) {
+            $query->where('nombre', 'LIKE', "%{$busqueda}%")
+            ->orWhere('precio', 'LIKE', "%{$busqueda}%")
+            ->orWhere('id', 'LIKE', "%{$busqueda}%");
+        })->orderBy('nombre','asc')->orderBy('id', 'asc')->paginate(6);
+        return response()->json($productos, 200);
     }
 
     public function store(StoreProductoRequest $request)
