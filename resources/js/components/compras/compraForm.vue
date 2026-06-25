@@ -2,11 +2,13 @@
 import { ref, watch } from "vue";
 import { compraService } from "../../services/compraService";
 import { productoService } from "../../services/productoService";
+import MensajeError from "../shared/mensajeError.vue";
 
 const parametrosComponente = defineProps({
     visible: Boolean,
     compra: Number,
 });
+const errorValidacion = ref("");
 const busquedaProducto = ref("");
 const resultadosProductos = ref([]);
 const productoSeleccionado = ref(null);
@@ -23,6 +25,15 @@ function seleccionarProducto(producto) {
     busquedaProducto.value = producto.id;
     resultadosProductos.value = [];
 }
+watch(
+    () => parametrosComponente.visible,
+    (valor) => {
+        if (!valor) {
+            errorValidacion.value = "";
+            resultadosProductos.value = [];
+        }
+    },
+);
 watch(
     () => parametrosComponente.compra,
     async (id) => {
@@ -45,13 +56,27 @@ watch(
     },
 );
 async function guardar() {
-    if (parametrosComponente.compra) {
-        await compraService.update(parametrosComponente.compra, form.value);
-    } else {
-        await compraService.create(form.value);
+    errorValidacion.value = "";
+    try {
+        if (
+            !form.value.nombre_comprador ||
+            !form.value.producto_id ||
+            !form.value.cantidad
+        ) {
+            errorValidacion.value =
+                "Por favor, completa todos los campos obligatorios.";
+            return;
+        }
+        if (parametrosComponente.compra) {
+            await compraService.update(parametrosComponente.compra, form.value);
+        } else {
+            await compraService.create(form.value);
+        }
+        emit("guardado");
+        emit("cerrar");
+    } catch (error) {
+        errorValidacion.value = "Error al completar el registro";
     }
-    emit("guardado");
-    emit("cerrar");
 }
 </script>
 <template>
@@ -135,7 +160,7 @@ async function guardar() {
                     class="w-full px-3 py-2 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-zinc-400"
                 />
             </div>
-
+            <MensajeError :mensaje="errorValidacion"></MensajeError>
             <div class="flex justify-end gap-2 mt-2">
                 <button
                     @click="$emit('cerrar')"
