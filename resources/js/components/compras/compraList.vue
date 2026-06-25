@@ -14,20 +14,22 @@ const cargarCompras = async (busqueda = "") => {
     busquedaEnVista.value = busqueda;
     const response = await compraService.getAll(busqueda, paginaActual.value);
     compras.value = response.data.data;
+    console.log("Compras registradas:", compras.value);
     ultimaPagina.value = response.data.last_page;
 };
 function abrirEditar(id) {
-    productoSeleccionado.value = id;
+    compraSeleccionada.value = id;
     mostrarForm.value = true;
 }
 function abrirCrear() {
-    productoSeleccionado.value = null;
+    compraSeleccionada.value = null;
     mostrarForm.value = true;
 }
 const eliminarCompra = async (id) => {
     await compraService.delete(id);
     cargarCompras(busquedaEnVista.value);
 };
+onMounted(cargarCompras);
 </script>
 <template>
     <div class="flex flex-col w-full h-full max-h-screen bg-zinc-50">
@@ -75,19 +77,22 @@ const eliminarCompra = async (id) => {
                             v-if="compras.length > 0"
                             class="hover:bg-zinc-50 transition-colors"
                         >
-                            <td class="px-5 py-4 font-medium text-zinc-900">
+                            <td class="px-6 py-4 font-medium text-zinc-900">
                                 {{ compra.id }}
                             </td>
-                            <td class="px-5 py-4">
+                            <td class="px-6 py-4">
                                 {{ compra.nombre_comprador }}
                             </td>
-                            <td class="px-5 py-4">
+                            <td class="px-6 py-4">
                                 {{ compra.producto.nombre }}
                             </td>
-                            <td class="px-5 py-4">
+                            <td class="px-6 py-4">
                                 {{ compra.cantidad }}
                             </td>
-                            <td class="px-5 py-4">
+                            <td class="px-6 py-4">
+                                {{ compra.producto.precio }}
+                            </td>
+                            <td class="px-6 py-4">
                                 {{ compra.total }}
                             </td>
                             <td class="px-6 py-4 flex justify-end gap-3">
@@ -114,7 +119,7 @@ const eliminarCompra = async (id) => {
                                 <button
                                     class="text-zinc-400 hover:text-red-600 transition-colors"
                                     title="Eliminar"
-                                    @click="eliminarProducto(compra.id)"
+                                    @click="eliminarCompra(compra.id)"
                                 >
                                     <svg
                                         class="w-5 h-5"
@@ -133,12 +138,12 @@ const eliminarCompra = async (id) => {
                             </td>
                         </tr>
                         <tr v-else>
-                            <td colspan="4" class="px-6 py-12 text-center">
+                            <td colspan="7" class="px-6 py-12 text-center">
                                 <div
                                     class="flex flex-col items-center justify-center gap-3"
                                 >
                                     <p class="text-zinc-500 font-medium">
-                                        No hay productos registrados con:
+                                        No hay compras registrados con:
                                     </p>
                                     <p class="text-zinc-500 font-medium">
                                         ' {{ busquedaEnVista }} '

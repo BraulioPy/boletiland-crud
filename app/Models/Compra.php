@@ -1,7 +1,7 @@
 <?php
-
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;;
 use Illuminate\Database\Eloquent\Model;
 
 class Compra extends Model
@@ -13,7 +13,8 @@ class Compra extends Model
     {
         return $this->belongsTo(Producto::class);
     }
-    public function total(){
+    public function getTotalAttribute()
+    {
         return $this->cantidad * $this->producto->precio;
     }
 }
