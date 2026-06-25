@@ -1,6 +1,33 @@
 <script setup>
-import BusquedaBar from '../shared/busquedaBar.vue';
-import busquedaBar from '../shared/busquedaBar.vue';
+import busquedaBar from "../shared/busquedaBar.vue";
+import { compraService } from "../../services/compraService.js";
+import compraForm from "./compraForm.vue";
+import { ref, onMounted } from "vue";
+const compras = ref([]);
+const mostrarForm = ref(false);
+const busquedaEnVista = ref("");
+const compraSeleccionada = ref(null);
+const paginaActual = ref(1);
+const ultimaPagina = ref(1);
+
+const cargarCompras = async (busqueda = "") => {
+    busquedaEnVista.value = busqueda;
+    const response = await compraService.getAll(busqueda, paginaActual.value);
+    compras.value = response.data.data;
+    ultimaPagina.value = response.data.last_page;
+};
+function abrirEditar(id) {
+    productoSeleccionado.value = id;
+    mostrarForm.value = true;
+}
+function abrirCrear() {
+    productoSeleccionado.value = null;
+    mostrarForm.value = true;
+}
+const eliminarCompra = async (id) => {
+    await compraService.delete(id);
+    cargarCompras(busquedaEnVista.value);
+};
 </script>
 <template>
     <div

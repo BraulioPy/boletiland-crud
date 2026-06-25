@@ -2,8 +2,7 @@
 import busquedaBar from "../shared/busquedaBar.vue";
 import { productoService } from "../../services/productoService.js";
 import ProductoForm from "./productoForm.vue";
-import { ref } from "vue";
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
 const productos = ref([]);
 const mostrarForm = ref(false);
 const busquedaEnVista = ref("");
