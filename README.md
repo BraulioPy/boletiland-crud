@@ -17,21 +17,28 @@
 
 Se tiene que instalar lo siguiente para poder correr el proyecto:
 
-- PHP 8.2+ ' https://windows.php.net/download (el archivo: VS17 x64 Non Thread Safe (para windows)) ' (se tiene que extraer dentro de C:\php su contenido)
+- PHP 8.2+ ' https://windows.php.net/download (el archivo: VS17 x64 Non Thread Safe .zip (para windows)) ' (se tiene que extraer dentro de C:\php su contenido)
 - Composer ' https://getcomposer.org '
 - Node.js y npm ' https://nodejs.org '
-- MySQL 8.0 junto con MySQL Workbench ' https://dev.mysql.com/downloads/installer ' (se descarga MySQL y dentro de la instalacion se hace personalizada y se selecciona Workbench)
+- MySQL 8.0 junto con MySQL Workbench ' https://dev.mysql.com/downloads/installer ' el archivo (mysql-instaler-community-msi) (se descarga MySQL y dentro de la instalacion seleccionas ' Custom '' y seleccionas los siguientes:
+
+1.  MySQL Server 8.0
+2.  MySQL Workbench 8.0
+    )
+
 - Git ' https://git-scm.com ' (para navegar entre ramas y usar el comando clone y asi)
 
 ---
 
 ## Extensiones de PHP requeridas
 
-hay que abrir el archivo php.ini (extraido el php en C:\php) y buscar con 'ctrl+f' que las siguientes extensiones no tengan el punto y coma ; al inicio para activarlas: - extension=gd 
-- extension=zip 
-- extension=mbstring 
-- extension=fileinfo 
-- extension=pdo_mysql 
+hay que abrir el archivo php.ini (extraido el php en C:\php) y buscar con 'ctrl+f' que las siguientes extensiones no tengan el punto y coma ; al inicio:
+
+- extension=gd
+- extension=zip
+- extension=mbstring
+- extension=fileinfo
+- extension=pdo_mysql
 - extension=openssl
 
 ---
@@ -39,7 +46,7 @@ hay que abrir el archivo php.ini (extraido el php en C:\php) y buscar con 'ctrl+
 ## Pasos de Instalacion
 
 1. Hay que clonar el repositorio:
-   ' git clone https://github.com/BraulioPy/boletiland-crud.git ' ()
+   ' git clone https://github.com/BraulioPy/boletiland-crud.git '
 
 2. Hay que entrar a la carpeta del proyecto:
    ' cd boletiland-crud '
@@ -47,21 +54,22 @@ hay que abrir el archivo php.ini (extraido el php en C:\php) y buscar con 'ctrl+
 3. Hay que Abrir MySQL Workbench y conectarse al servidor local. Ir a File > Open SQL Script, seleccionar el archivo boletiland_crud.sql que esta en la raiz del proyecto y ejecutalo con el boton del rayo. Esto crea la base de datos con todas sus tablas y datos de ejemplo.
 
 4. Hay que Copiar el archivo de configuracion:
-   ' cp .env.example .env ' (en terminal dentro de la raiz del proyecto)
+   ' cp .env.example .env ' (en terminal donde clonamos el repo e hicimos el cd)
 
-5. Se debe de Abrir el archivo .env recien creado y editar las siguientes variables con las credenciales del MySQL:
+5. Se debe de Abrir el archivo .env recien creado, quitar los # y editar las siguientes variables con las credenciales del MySQL:
+    - DB_CONNECTION=mysql
     - DB_HOST=127.0.0.1
     - DB_PORT=3306
     - DB_DATABASE=boletiland_crud
     - DB_USERNAME=root
     - DB_PASSWORD=tu_contrasena_MySQL
-6. Hay Instalar las dependencias de PHP (dentro de una terminal en la raiz del proyecto):
+6. Hay Instalar las dependencias de PHP (en terminal donde clonamos el repo e hicimos el cd):
    ' composer install '
 
-7. Hay que Generar la clave de seguridad de la aplicacion (dentro de una terminal en la raiz del proyecto):
+7. Hay que Generar la clave de seguridad de la aplicacion (en terminal donde clonamos el repo e hicimos el cd):
    ' php artisan key:generate '
 
-8. Hay Instala las dependencias de JavaScript (dentro de una terminal en la raiz del proyecto):
+8. Hay Instala las dependencias de JavaScript (en terminal donde clonamos el repo e hicimos el cd):
    ' npm install '
 
 9. Se deben de Abrir dos terminales en la raiz del proyecto y correr uno en cada una:
