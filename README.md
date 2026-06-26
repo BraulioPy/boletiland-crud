@@ -63,7 +63,7 @@ hay que abrir el archivo php.ini (extraido el php en C:\php) y buscar con 'ctrl+
     - DB_DATABASE=boletiland_crud
     - DB_USERNAME=root
     - DB_PASSWORD=tu_contrasena_MySQL
-6. Hay Instalar las dependencias de PHP (en terminal donde clonamos el repo e hicimos el cd):
+6. Hay que Instalar las dependencias de PHP (en terminal donde clonamos el repo e hicimos el cd):
    ' composer install '
 
 7. Hay que Generar la clave de seguridad de la aplicacion (en terminal donde clonamos el repo e hicimos el cd):
