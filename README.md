@@ -27,12 +27,11 @@ Se tiene que instalar lo siguiente para poder correr el proyecto:
 
 ## Extensiones de PHP requeridas
 
-hay que abrir el archivo php.ini (extraido el php en C:\php) y buscar con 'ctrl+f' que las siguientes extensiones no tengan el punto y coma ; al inicio para activarlas: - extension=gd
-
-- extension=zip
-- extension=mbstring
-- extension=fileinfo
-- extension=pdo_mysql
+hay que abrir el archivo php.ini (extraido el php en C:\php) y buscar con 'ctrl+f' que las siguientes extensiones no tengan el punto y coma ; al inicio para activarlas: - extension=gd 
+- extension=zip 
+- extension=mbstring 
+- extension=fileinfo 
+- extension=pdo_mysql 
 - extension=openssl
 
 ---
