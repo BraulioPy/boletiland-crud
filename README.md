@@ -51,7 +51,7 @@ hay que abrir el archivo php.ini (extraido el php en C:\php) y buscar con 'ctrl+
 2. Hay que entrar a la carpeta del proyecto:
    ' cd boletiland-crud '
 
-3. Hay que Abrir MySQL Workbench y conectarse al servidor local. Ir a File > Open SQL Script, seleccionar el archivo boletiland_crud.sql que esta en la raiz del proyecto y ejecutalo con el boton del rayo. Esto crea la base de datos con todas sus tablas y datos de ejemplo.
+3. Hay que Abrir MySQL Workbench y conectarse al servidor local. Ir a Server > Data Import > Import from self contained > seleccionar el archivo boletiland_crud.sql que esta en la raiz del proyecto > Import Progress > Start Import. Esto crea la base de datos con todas sus tablas y datos de ejemplo y puedes verla en Schemes y refresh.
 
 4. Hay que Copiar el archivo de configuracion:
    ' cp .env.example .env ' (en terminal donde clonamos el repo e hicimos el cd)
@@ -63,7 +63,7 @@ hay que abrir el archivo php.ini (extraido el php en C:\php) y buscar con 'ctrl+
     - DB_DATABASE=boletiland_crud
     - DB_USERNAME=root
     - DB_PASSWORD=tu_contrasena_MySQL
-6. Hay Instalar las dependencias de PHP (en terminal donde clonamos el repo e hicimos el cd):
+6. Hay que Instalar las dependencias de PHP (en terminal donde clonamos el repo e hicimos el cd):
    ' composer install '
 
 7. Hay que Generar la clave de seguridad de la aplicacion (en terminal donde clonamos el repo e hicimos el cd):
