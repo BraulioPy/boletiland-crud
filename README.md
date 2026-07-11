@@ -82,3 +82,27 @@ hay que abrir el archivo php.ini (extraido el php en C:\php) y buscar con 'ctrl+
 10. Hay que abrir el navegador y entrar a la direccion que se muestra en la terminal 2, con ctrl+click arriba del link de la terminal
 
 Nota: las dos terminales deben estar activas al mismo tiempo. Si el backend no esta corriendo los endpoints no funcionaran.
+
+# INDICACIONES DOCKER
+
+## Primera vez bajado el proyecto
+
+1. Bajamos el repo de github
+
+2. En terminal usamos 'cd' para acceder a la carpeta del proyecto
+
+3. Clonamos el '.env-example' a un '. env' usando: 'cp .env.example .env'
+
+4. Lanzamos el entorno usando docker compose: 'docker compose up -d --build'
+
+5. Nos aseguramos de tener la base de datos en las carpetas del sistema y corremos:
+   'docker compose exec db mysql -u root -proot boletiland_database < boletiland_crud.sql'
+
+## Prendido diario (despues de tenerlo bajado)
+
+1. Para verlo, nos metemos a la carpeta del proyecto con 'cd'
+
+2. Lanzamos el compose para prender el proyecto: 'docker compose up -d'
+
+3. Si queremos estar modificandp el frontend y recargarlo en tiempo real, usamos lo siguiente:
+   'docker compose exec app npm run dev'
