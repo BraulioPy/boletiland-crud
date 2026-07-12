@@ -87,6 +87,8 @@ Nota: las dos terminales deben estar activas al mismo tiempo. Si el backend no e
 
 ## Primera vez bajado el proyecto
 
+0. ABRIMOS DOCKER DESKTOP
+
 1. Bajamos el repo de github
 
 2. En terminal usamos 'cd' para acceder a la carpeta del proyecto
@@ -96,6 +98,8 @@ Nota: las dos terminales deben estar activas al mismo tiempo. Si el backend no e
 4. Lanzamos el entorno usando docker compose: 'docker compose up -d --build'
 
 ## Prendido diario (despues de tenerlo bajado)
+
+0. ABRIMOS DOCKER DESKTOP
 
 1. Para verlo, nos metemos a la carpeta del proyecto con 'cd'
 

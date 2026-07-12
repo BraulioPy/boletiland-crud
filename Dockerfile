@@ -1,8 +1,15 @@
 # ETAPA 1: Dependencias PHP
-FROM composer:2.10.1 AS composer_build
+FROM php:8.4-cli-alpine AS composer_build
+# Instalar herramientas para compilar extensiones
+RUN apk add --no-cache libpng-dev libzip-dev zip unzip
+RUN docker-php-ext-install gd zip
+
+# Instalar Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 WORKDIR /app
-COPY . .
-RUN composer install --no-dev --optimize-autoloader
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader --no-scripts
 
 # ETAPA 2: Dependencias Node
 FROM node:24 AS node_build
@@ -19,7 +26,5 @@ COPY . .
 COPY --from=composer_build /app/vendor ./vendor
 COPY --from=node_build /app/public/build ./public/build
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-# Apache necesita que el DocumentRoot apunte a la carpeta /public de Laravel
 RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
 EXPOSE 80
-# La imagen oficial ya arranca apache, no necesitas CMD extra.
