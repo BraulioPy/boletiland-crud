@@ -21,17 +21,30 @@ RUN npm install && npm run build
 
 # ETAPA 3: Imagen final
 FROM php:8.4-apache
-RUN apt-get update && apt-get install -y libpng-dev libonig-dev libxml2-dev zip unzip git
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Instalar Composer directamente en la imagen final
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# 1. Instalar dependencias del sistema incluyendo libzip-dev
+RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip \
+    git \
+    libzip-dev 
+
+# 2. Instalar extensiones PHP (añadimos zip aquí)
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+
+# 3. Solucionar el problema de git (añade esto ANTES de cualquier comando git)
+RUN git config --global --add safe.directory /var/www/html
 
 WORKDIR /var/www/html
 COPY . .
 
-# INSTALA AQUÍ DENTRO DE LA IMAGEN FINAL
+# Instalar Composer dentro de la imagen final (como acordamos antes)
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader --no-scripts
+
 # Copiar assets de Node
 COPY --from=node_build /app/public/build ./public/build
 
