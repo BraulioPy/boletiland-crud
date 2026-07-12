@@ -95,9 +95,6 @@ Nota: las dos terminales deben estar activas al mismo tiempo. Si el backend no e
 
 4. Lanzamos el entorno usando docker compose: 'docker compose up -d --build'
 
-5. Nos aseguramos de tener la base de datos en las carpetas del sistema y corremos:
-   'docker compose exec db mysql -u root -proot boletiland_database < boletiland_crud.sql'
-
 ## Prendido diario (despues de tenerlo bajado)
 
 1. Para verlo, nos metemos a la carpeta del proyecto con 'cd'

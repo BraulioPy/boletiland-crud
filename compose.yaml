@@ -1,0 +1,37 @@
+services:
+  # Contenedor de la Aplicación (Laravel + Apache)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: boletiland-app
+    restart: always
+    ports:
+      - "8000:80" # Tu compu entra por el 8000, el contenedor escucha en el 80
+    volumes:
+      - .:/var/www/html # Sincroniza código en tiempo real
+    environment:
+      DB_HOST: mysql # Nombre del servicio de abajo
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD} # Los lee del .env local
+    depends_on:
+      - mysql
+
+  # Contenedor de la Base de Datos (MySQL)
+  mysql:
+    image: mysql:8.0
+    container_name: boletiland_laravel_mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD} # Los lee del .env local
+    volumes:
+      - db_data:/var/lib/mysql # VOLUMEN 1: Guarda la nueva data siempre
+      - ./boletiland_crud.sql:/docker-entrypoint-initdb.d/init.sql # VOLUMEN 2: Carga el dump inicial
+    ports:
+      - "3306:3306"
+
+# Declaración obligatoria de volúmenes con nombre
+volumes:
+  db_data:
