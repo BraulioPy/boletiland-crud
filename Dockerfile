@@ -51,3 +51,12 @@ COPY --from=node_build /app/public/build ./public/build
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
 EXPOSE 80
+
+#Etapa 4 -- KEY GENERATE SCRIPT:
+
+# Copiar el script de entrada y darle permisos
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Definir el comando de inicio usando el script
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
