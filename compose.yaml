@@ -1,15 +1,15 @@
 services:
   # Contenedor de la Aplicación (Laravel + Apache)
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     container_name: boletiland-app
     restart: always
     ports:
       - "8000:80" # Tu compu entra por el 8000, el contenedor escucha en el 80
     volumes:
       - .:/var/www/html # Sincroniza código en tiempo real
+      - /var/www/html/vendor          # Protege el vendor de la imagen
+      - /var/www/html/public/build    # Protege los assets compilados
     environment:
       DB_HOST: mysql # Nombre del servicio de abajo
       DB_DATABASE: ${DB_DATABASE}
@@ -35,3 +35,4 @@ services:
 # Declaración obligatoria de volúmenes con nombre
 volumes:
   db_data:
+  
